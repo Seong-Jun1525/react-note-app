@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import {v4} from 'uuid'
 const initialState = {
     tagsList: [
-        {tag: 'learnings', id: v4()},
-        {tag: 'work', id: v4()},
+        {tag: 'coding', id: v4()},
+        {tag: 'exercise', id: v4()},
         {tag: 'quotes', id: v4()}
     ]
 }
