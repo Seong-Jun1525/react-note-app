@@ -42,6 +42,7 @@ const NoteCard = ({note, type}: NoteCardProps) => {
         <div className='noteCard__date'>
           {date}
         </div>
+        {getRelevantBtns()}
       </FooterBox>
     </Card>
   )
