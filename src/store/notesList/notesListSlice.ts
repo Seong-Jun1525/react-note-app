@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Note } from "../../types/note";
+import notes from "../../notesData";
 
 interface NoteState {
     mainNotes: Note[],
@@ -9,7 +10,7 @@ interface NoteState {
 }
 
 const initialState:NoteState = {
-    mainNotes: [],
+    mainNotes: [...notes],
     archiveNotes: [],
     trashNotes: [],
     editNote: null
