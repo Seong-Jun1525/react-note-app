@@ -6,11 +6,16 @@ import { toggleCreateNoteModal, toggleTagsModal } from '../../../store/modal/mod
 import { setEditNote } from '../../../store/notesList/notesListSlice'
 import { ButtonFill, ButtonOutline } from '../../../styles/styles'
 import { FaPlus, FaTimes } from 'react-icons/fa'
+import { v4 } from 'uuid'
+import { TagsModal } from '../..'
+
 
 const CreateNoteModal = () => {
   const dispatch = useAppDispatch()
 
   const {editNote} = useAppSelector((state) => state.notesList)
+  const {viewAddTagsModal} = useAppSelector((state) => state.modal)
+
   const [noteTitle, setNoteTitle] = useState(editNote?.title || "")
   const [value, setValue] = useState(editNote?.content || "")
   const [addedTags, setAddedTags] = useState(editNote?.tags || [])
@@ -22,24 +27,40 @@ const CreateNoteModal = () => {
     dispatch(setEditNote(null))
   }
 
+  const tagsHandler = (tag: string, type: string) => {
+    const newTag = tag.toLocaleLowerCase()
+
+    if(type === 'add') {
+      setAddedTags((prev) => [...prev, {tag: newTag, id: v4()}])
+    } else {
+      setAddedTags(addedTags.filter(({tag}) => tag !== newTag)) // newTag. (tag의 값이 lowercase된) 
+    }
+  }
+
   return (
     <FixedContainer>
+      {viewAddTagsModal && 
+        <TagsModal type='add' addedTags={addedTags} handleTags={tagsHandler} />
+      }
       <Box>
         <TopBox>
           <div className='createNote__title'>노트 생성하기</div>
           <DeleteBox className='createNote__close-btn' onClick={closeCreateNoteModal} />
         </TopBox>
+
         <StyledInput type='text' value={noteTitle} name="title" placeholder='제목...' onChange={e => setNoteTitle(e.target.value)} />
+
         <div className='createNote__create-btn'>
           <ButtonFill>
             {editNote ? (<span>저장하기</span>) : <><FaPlus /><span>생성하기</span></>}
           </ButtonFill>
         </div>
+
         <AddedTagsBox>
           {addedTags.map(({tag, id}) => (
             <div key={id}>
               <span className='createNote__tag'>{tag}</span>
-              <span className='createNote__tag-remove'><FaTimes /></span>
+              <span className='createNote__tag-remove' onClick={() => tagsHandler(tag, 'remove')}><FaTimes /></span>
             </div>
           ))}
         </AddedTagsBox>
@@ -48,6 +69,7 @@ const CreateNoteModal = () => {
           <ButtonOutline onClick={() => dispatch(toggleTagsModal({type: 'add', view: true}))}>
             Add Tag
           </ButtonOutline>
+
           <div>
             <label htmlFor='color'>배경색 : </label>
             <select value={noteColor} id='color' onChange={(e) => setNoteColor(e.target.value)}>
