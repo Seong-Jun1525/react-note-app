@@ -6,7 +6,7 @@ const notes = [
         content: "Note 1 content",
         tags: [{tag: 'coding', id: v4()}],
         color: "#cce0ff",
-        priority: "high",
+        priority: "low",
         isPinned: true,
         isRead: false,
         date: "10/12/22 2.55 PM",
