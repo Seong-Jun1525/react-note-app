@@ -3,11 +3,14 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/redux'
 import { DeleteBox, FixedContainer } from '../Modal.styles'
 import { AddedTagsBox, Box, OptionsBox, StyledInput, TopBox } from './CreateNoteModal.styles'
 import { toggleCreateNoteModal, toggleTagsModal } from '../../../store/modal/modalSlice'
-import { setEditNote } from '../../../store/notesList/notesListSlice'
+import { setEditNote, setMainNotes } from '../../../store/notesList/notesListSlice'
 import { ButtonFill, ButtonOutline } from '../../../styles/styles'
 import { FaPlus, FaTimes } from 'react-icons/fa'
 import { v4 } from 'uuid'
 import { TagsModal } from '../..'
+import TextEditor from '../../TextEditor/TextEditor'
+import { toast } from 'react-toastify'
+import dayjs from 'dayjs'
 
 
 const CreateNoteModal = () => {
@@ -37,6 +40,45 @@ const CreateNoteModal = () => {
     }
   }
 
+  const createNoteHandler = () => {
+    if(!noteTitle) {
+      toast.error('타이틀을 적어주세요')
+      return
+    } else if(value === "<p><br/></p>") {
+      toast.error('글을 작성해주세요')
+      return
+    }
+
+    const date = dayjs().format("DD/MM/YYYY h:mm A")
+    // console.log(date)
+    let note: Partial<Note> = {
+      title: noteTitle,
+      content: value,
+      tags: addedTags,
+      color: noteColor,
+      priority,
+      editedTime: new Date().getTime()
+    }
+
+    if(editNote) { // 수정중
+      note = {...editNote, ...note}
+    } else {
+      note = {
+        ...note,
+        date,
+        createdTime: new Date().getTime(),
+        editedTime: null,
+        isPinned: false,
+        isRead: false,
+        id: v4()
+      }
+    }
+
+    dispatch(setMainNotes(note))
+    dispatch(toggleCreateNoteModal(false))
+    dispatch(setEditNote(null))
+  }
+
   return (
     <FixedContainer>
       {viewAddTagsModal && 
@@ -50,10 +92,8 @@ const CreateNoteModal = () => {
 
         <StyledInput type='text' value={noteTitle} name="title" placeholder='제목...' onChange={e => setNoteTitle(e.target.value)} />
 
-        <div className='createNote__create-btn'>
-          <ButtonFill>
-            {editNote ? (<span>저장하기</span>) : <><FaPlus /><span>생성하기</span></>}
-          </ButtonFill>
+        <div>
+          <TextEditor color={noteColor} value={value} setValue={setValue} />
         </div>
 
         <AddedTagsBox>
@@ -89,9 +129,22 @@ const CreateNoteModal = () => {
             </select>
           </div>
         </OptionsBox>
+
+        <div className='createNote__create-btn'>
+          <ButtonFill onClick={createNoteHandler}>
+            {editNote ? (<span>저장하기</span>) : <><FaPlus /><span>생성하기</span></>}
+          </ButtonFill>
+        </div>
       </Box>
     </FixedContainer>
   )
 }
 
 export default CreateNoteModal
+
+
+
+
+
+// JSX에서 <p></p>이런식으로 코드를 작성하면
+// babel 작동 후 React.createElement('p', {}, 'Hello World') 이런식으로 변경을 해줌
