@@ -89,6 +89,11 @@ const notesListSlice = createSlice({
                     note.id === id ? {...note, isRead: !note.isRead} : note
                 ))
             }
+            // state.archiveNotes
+            // state.trashNotes
+            // state.mainNotes
+            // 이 중에서 딱 하나의 note에 isRead 프로퍼티를 원래 false였으면 true로 바꿔주고
+            // 바꿔주면 그 특정 노트를 화면에 보여준다
 
             if(type === "archive") {
                 setRead(noteType.archiveNotes)
