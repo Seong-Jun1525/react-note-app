@@ -3,8 +3,16 @@ import { RiInboxArchiveFill } from "react-icons/ri";
 import { FaEdit, FaTrash, FaTrashRestore } from "react-icons/fa";
 import { Note } from "../types/note";
 import { Dispatch } from "@reduxjs/toolkit";
+import { toggleCreateNoteModal } from "../store/modal/modalSlice";
+import { deleteNote, restoreNote, setArchiveNotes, setEditNote, setTrashNotes, unarchiveNote } from "../store/notesList/notesListSlice";
 
 const getRelevantBtns = (type: string, note: Note, dispatch: Dispatch) => {
+    
+    const clickHandler = () => {
+        dispatch(toggleCreateNoteModal(true))
+        dispatch(setEditNote(note))
+    }
+    
     if(type === "archive") {
         return (
             <>
