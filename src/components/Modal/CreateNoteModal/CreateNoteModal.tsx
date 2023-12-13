@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux'
 import { DeleteBox, FixedContainer } from '../Modal.styles'
 import { AddedTagsBox, Box, OptionsBox, StyledInput, TopBox } from './CreateNoteModal.styles'
@@ -11,6 +11,7 @@ import { TagsModal } from '../..'
 import TextEditor from '../../TextEditor/TextEditor'
 import { toast } from 'react-toastify'
 import dayjs from 'dayjs'
+import { Note } from '../../../types/note'
 
 
 const CreateNoteModal = () => {

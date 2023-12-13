@@ -1,4 +1,3 @@
-import React from 'react'
 import { Note } from '../../../types/note'
 import { useAppDispatch } from '../../../hooks/redux'
 import { DeleteBox, FixedContainer } from '../Modal.styles'

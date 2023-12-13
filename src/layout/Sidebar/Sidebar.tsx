@@ -1,4 +1,3 @@
-import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../hooks/redux'
 import { Container, ItemsBox, MainBox, StyledLogo } from './Sidebar.styles'
